@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AlytaloMVC.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -22,14 +24,38 @@ namespace AlytaloMVC.Controllers
         [HttpPost]
         public JsonResult LuoUusiTalo()
         {
-        
+            bool success = false;
+            string error = "";
+
             int length = (int)Request.InputStream.Length;
             byte[] buffer = new byte[length];
             int bytesRead = Request.InputStream.Read(buffer, 0, length);
             string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-            Debug.WriteLine("json: " + data);
 
-            var result = new { success = "something", error = "nope" };
+            Debug.WriteLine("json: " + data);
+            TaloViewModel input = JsonConvert.DeserializeObject<TaloViewModel>(data);
+            AlytaloEntities entity = new AlytaloEntities(); 
+
+            try
+            {
+                Talo newTalo = new Talo();
+                newTalo.Nimi = input.Nimi;
+                newTalo.Osoite = input.Osoite;
+
+                entity.Talo.Add(newTalo);
+                entity.SaveChanges();
+                success = true;
+
+            } catch (Exception e)
+            {
+                error = e.GetType().Name + ": " + e.Message;
+            
+            } finally
+            {
+                entity.Dispose();
+            }
+
+            var result = new { success = success, error = error };
             return Json(result);
         }
     }
