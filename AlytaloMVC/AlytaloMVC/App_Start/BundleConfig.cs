@@ -24,6 +24,7 @@ namespace AlytaloMVC
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/bootstrapSH.css",
                       "~/Content/site.css"));
         }
     }
