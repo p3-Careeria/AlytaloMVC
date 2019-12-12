@@ -31,10 +31,11 @@ namespace AlytaloMVC.Controllers
             byte[] buffer = new byte[length];
             int bytesRead = Request.InputStream.Read(buffer, 0, length);
             string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+            // Onko tarpeellinen?: if data = "null" tjsp -> return 
 
             Debug.WriteLine("json: " + data);
             TaloViewModel input = JsonConvert.DeserializeObject<TaloViewModel>(data);
-            AlytaloEntities entity = new AlytaloEntities(); 
+            AlytaloEntities entity = new AlytaloEntities();
 
             try
             {
@@ -46,11 +47,13 @@ namespace AlytaloMVC.Controllers
                 entity.SaveChanges();
                 success = true;
 
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 error = e.GetType().Name + ": " + e.Message;
-            
-            } finally
+
+            }
+            finally
             {
                 entity.Dispose();
             }
@@ -58,5 +61,32 @@ namespace AlytaloMVC.Controllers
             var result = new { success = success, error = error };
             return Json(result);
         }
+
+        public ActionResult Talot()
+        {
+            AlytaloEntities entity = new AlytaloEntities();
+
+            List<TaloViewModel> model = new List<TaloViewModel>();
+            List<Talo> talot = entity.Talo.ToList();
+
+            if (!talot.Any())
+            {
+                return Content("<script language='javascript' type='text/javascript'>" +
+                                "alert('Luo tietokantaan ensin talo');" +
+                                "window.location.href ='/home/LuoTalo' ;"+
+                                "</script>");
+
+            } else
+            {
+
+
+
+            }
+            return View();
+
+
+        }
+
+
     }
 }

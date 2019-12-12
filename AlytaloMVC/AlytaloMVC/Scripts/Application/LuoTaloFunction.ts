@@ -13,7 +13,7 @@ function initLuoTalo() {
         var data: Talo = new Talo();
         data.Nimi = Nimi;
         data.Osoite = Osoite;
-        alert("data: " + data.Nimi); 
+        alert("data: " + data.Nimi);
 
         $.ajax({
             type: "POST",
@@ -22,12 +22,12 @@ function initLuoTalo() {
             contentType: "application/json",
             success: function (data) {
                 if (data.success == true) {
-                // TODO: Reaktiot 
-                    // $(location).attr('href', '/Home/talo (TMS)');
+                    alert("Talon luonti onnistui");
+                    $(location).attr('href', '/Home/Talo');
                 } else {
-                 
+
                 }
-                
+
             },
             dataType: "json"
         });

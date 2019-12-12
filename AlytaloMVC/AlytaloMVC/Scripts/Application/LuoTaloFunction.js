@@ -19,8 +19,8 @@ function initLuoTalo() {
             contentType: "application/json",
             success: function (data) {
                 if (data.success == true) {
-                    // TODO: Reaktiot 
-                    // $(location).attr('href', '/Home/talo (TMS)');
+                    alert("Talon luonti onnistui");
+                    $(location).attr('href', '/Home/Talo');
                 }
                 else {
                 }
