@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Luo talo";
+}
+
+
+@section scripts {
+    <script src="~/Scripts/Application/LuoOminaisuusFunctions.js"></script>
+
+    <script>
+        function clicked() {
+            if (Sauna.checked) {
+                LuoOminaisuus("Sauna");
+            } else if (Termostaatti.checked) {
+                LuoOminaisuus("Termostaatti");
+            } else if (Valot.checked) {
+                LuoOminaisuus("Valot");
+            } else {
+                alert("Valitse ensin haluamasti ominaisuus");
+            }
+            document.getElementById('Sauna').checked = false;
+            document.getElementById('Termostaatti').checked = false;
+            document.getElementById('Valot').checked = false;
+
+        }
+    </script>
+}
+<p>&nbsp;</p>
+<div class="jumbotron">
+    <fieldset class="form-group" >
+        <legend>Lisää haluamasi ominaisuus</legend>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input type="radio" class="form-check-input" id="Sauna" value="option1">
+                Sauna
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input type="radio" class="form-check-input" id="Termostaatti" value="option2">
+                Termostaatti
+            </label>
+        </div>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input type="radio" class="form-check-input" id="Valot" value="option2">
+                Valot
+            </label>
+        </div>
+    </fieldset>
+    <button type="button" class="btn btn-primary btn-lg" onclick="clicked()">Tallenna</button>
+   
+</div>

@@ -146,18 +146,23 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OminaisuudetController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Lampotila.cs">
+    <Compile Include="Loki.cs">
       <DependentUpon>AlytaloModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\TaloViewModel.cs" />
+    <Compile Include="Models\OminaisuusViewModel.cs" />
+    <Compile Include="Models\TapahtumatViewModel.cs" />
+    <Compile Include="Ominaisuudet.cs">
+      <DependentUpon>AlytaloModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sauna.cs">
       <DependentUpon>AlytaloModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Talo.cs">
+    <Compile Include="Termostaatti.cs">
       <DependentUpon>AlytaloModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Valot.cs">
@@ -167,8 +172,8 @@
   <ItemGroup>
     <Content Include="AlytaloModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AlytaloModel.Context.cs</LastGenOutput>
       <DependentUpon>AlytaloModel.edmx</DependentUpon>
+      <LastGenOutput>AlytaloModel.Context.cs</LastGenOutput>
     </Content>
     <Content Include="AlytaloModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -298,6 +303,7 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="SQLQueries\CreateTables.sql" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -320,8 +326,9 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Home\LuoTalo.cshtml" />
-    <Content Include="Views\Home\Talot.cshtml" />
+    <Content Include="Views\Home\LuoOminaisuus.cshtml" />
+    <Content Include="Views\Home\Tapahtumat.cshtml" />
+    <Content Include="Views\Ominaisuudet\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -332,7 +339,7 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="Scripts\Application\LuoTaloFunction.ts" />
+    <TypeScriptCompile Include="Scripts\Application\LuoOminaisuusFunctions.ts" />
     <TypeScriptCompile Include="Scripts\index.d.ts" />
     <TypeScriptCompile Include="Scripts\typings\jquery\jquery.d.ts" />
   </ItemGroup>

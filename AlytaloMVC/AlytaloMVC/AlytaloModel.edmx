@@ -5,200 +5,106 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="AlytaloModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Lampotila">
+        <EntityType Name="Loki">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Talon Id" Type="int" Nullable="false" />
-          <Property Name="Tavoite" Type="bit" />
-          <Property Name="Lampo" Type="int" />
+          <Property Name="OminaisuusId" Type="int" Nullable="false" />
+          <Property Name="Tapahtuma" Type="nvarchar" MaxLength="100" />
           <Property Name="Ajakohta" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Ominaisuudet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OminaisuusId" Type="int" Nullable="false" />
+          <Property Name="Nimi" Type="nvarchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="Sauna">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Talon Id" Type="int" Nullable="false" />
           <Property Name="Kaynnissa" Type="bit" />
           <Property Name="Lampo" Type="int" />
-          <Property Name="Ajakohta" Type="datetime" />
         </EntityType>
-        <EntityType Name="Talo">
+        <EntityType Name="Termostaatti">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Nimi" Type="nvarchar" MaxLength="50" />
-          <Property Name="Osoite" Type="nvarchar" MaxLength="100" />
+          <Property Name="Tavoite" Type="int" />
+          <Property Name="Lampo" Type="int" />
         </EntityType>
         <EntityType Name="Valot">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Talon Id" Type="int" Nullable="false" />
           <Property Name="Kaynnissa" Type="bit" />
           <Property Name="Teho" Type="int" />
-          <Property Name="Ajakohta" Type="datetime" />
         </EntityType>
-        <Association Name="FK_Alytalo_Lampotila">
-          <End Role="Talo" Type="Self.Talo" Multiplicity="1" />
-          <End Role="Lampotila" Type="Self.Lampotila" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Talo">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Lampotila">
-              <PropertyRef Name="Talon Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Alytalo_Sauna">
-          <End Role="Talo" Type="Self.Talo" Multiplicity="1" />
-          <End Role="Sauna" Type="Self.Sauna" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Talo">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Sauna">
-              <PropertyRef Name="Talon Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Alytalo_Valot">
-          <End Role="Talo" Type="Self.Talo" Multiplicity="1" />
-          <End Role="Valot" Type="Self.Valot" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Talo">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Valot">
-              <PropertyRef Name="Talon Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="AlytaloModelStoreContainer">
-          <EntitySet Name="Lampotila" EntityType="Self.Lampotila" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Loki" EntityType="Self.Loki" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ominaisuudet" EntityType="Self.Ominaisuudet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sauna" EntityType="Self.Sauna" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Talo" EntityType="Self.Talo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Termostaatti" EntityType="Self.Termostaatti" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Valot" EntityType="Self.Valot" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK_Alytalo_Lampotila" Association="Self.FK_Alytalo_Lampotila">
-            <End Role="Talo" EntitySet="Talo" />
-            <End Role="Lampotila" EntitySet="Lampotila" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Alytalo_Sauna" Association="Self.FK_Alytalo_Sauna">
-            <End Role="Talo" EntitySet="Talo" />
-            <End Role="Sauna" EntitySet="Sauna" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Alytalo_Valot" Association="Self.FK_Alytalo_Valot">
-            <End Role="Talo" EntitySet="Talo" />
-            <End Role="Valot" EntitySet="Valot" />
-          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AlytaloModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Lampotila">
+        <EntityType Name="Loki">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Talon_Id" Type="Int32" Nullable="false" />
-          <Property Name="Tavoite" Type="Boolean" />
-          <Property Name="Lampo" Type="Int32" />
+          <Property Name="OminaisuusId" Type="Int32" Nullable="false" />
+          <Property Name="Tapahtuma" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Ajakohta" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Talo" Relationship="Self.FK_Alytalo_Lampotila" FromRole="Lampotila" ToRole="Talo" />
+        </EntityType>
+        <EntityType Name="Ominaisuudet">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OminaisuusId" Type="Int32" Nullable="false" />
+          <Property Name="Nimi" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Sauna">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Talon_Id" Type="Int32" Nullable="false" />
           <Property Name="Kaynnissa" Type="Boolean" />
           <Property Name="Lampo" Type="Int32" />
-          <Property Name="Ajakohta" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Talo" Relationship="Self.FK_Alytalo_Sauna" FromRole="Sauna" ToRole="Talo" />
         </EntityType>
-        <EntityType Name="Talo">
+        <EntityType Name="Termostaatti">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Nimi" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Osoite" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Lampotila" Relationship="Self.FK_Alytalo_Lampotila" FromRole="Talo" ToRole="Lampotila" />
-          <NavigationProperty Name="Sauna" Relationship="Self.FK_Alytalo_Sauna" FromRole="Talo" ToRole="Sauna" />
-          <NavigationProperty Name="Valot" Relationship="Self.FK_Alytalo_Valot" FromRole="Talo" ToRole="Valot" />
+          <Property Name="Tavoite" Type="Int32" />
+          <Property Name="Lampo" Type="Int32" />
         </EntityType>
         <EntityType Name="Valot">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Talon_Id" Type="Int32" Nullable="false" />
           <Property Name="Kaynnissa" Type="Boolean" />
           <Property Name="Teho" Type="Int32" />
-          <Property Name="Ajakohta" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Talo" Relationship="Self.FK_Alytalo_Valot" FromRole="Valot" ToRole="Talo" />
         </EntityType>
-        <Association Name="FK_Alytalo_Lampotila">
-          <End Role="Talo" Type="Self.Talo" Multiplicity="1" />
-          <End Role="Lampotila" Type="Self.Lampotila" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Talo">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Lampotila">
-              <PropertyRef Name="Talon_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Alytalo_Sauna">
-          <End Role="Talo" Type="Self.Talo" Multiplicity="1" />
-          <End Role="Sauna" Type="Self.Sauna" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Talo">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Sauna">
-              <PropertyRef Name="Talon_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Alytalo_Valot">
-          <End Role="Talo" Type="Self.Talo" Multiplicity="1" />
-          <End Role="Valot" Type="Self.Valot" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Talo">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Valot">
-              <PropertyRef Name="Talon_Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="AlytaloEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Lampotila" EntityType="Self.Lampotila" />
+          <EntitySet Name="Loki" EntityType="Self.Loki" />
+          <EntitySet Name="Ominaisuudet" EntityType="Self.Ominaisuudet" />
           <EntitySet Name="Sauna" EntityType="Self.Sauna" />
-          <EntitySet Name="Talo" EntityType="Self.Talo" />
+          <EntitySet Name="Termostaatti" EntityType="Self.Termostaatti" />
           <EntitySet Name="Valot" EntityType="Self.Valot" />
-          <AssociationSet Name="FK_Alytalo_Lampotila" Association="Self.FK_Alytalo_Lampotila">
-            <End Role="Talo" EntitySet="Talo" />
-            <End Role="Lampotila" EntitySet="Lampotila" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Alytalo_Sauna" Association="Self.FK_Alytalo_Sauna">
-            <End Role="Talo" EntitySet="Talo" />
-            <End Role="Sauna" EntitySet="Sauna" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Alytalo_Valot" Association="Self.FK_Alytalo_Valot">
-            <End Role="Talo" EntitySet="Talo" />
-            <End Role="Valot" EntitySet="Valot" />
-          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -206,14 +112,22 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="AlytaloModelStoreContainer" CdmEntityContainer="AlytaloEntities">
-          <EntitySetMapping Name="Lampotila">
-            <EntityTypeMapping TypeName="AlytaloModel.Lampotila">
-              <MappingFragment StoreEntitySet="Lampotila">
+          <EntitySetMapping Name="Loki">
+            <EntityTypeMapping TypeName="AlytaloModel.Loki">
+              <MappingFragment StoreEntitySet="Loki">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Talon_Id" ColumnName="Talon Id" />
-                <ScalarProperty Name="Tavoite" ColumnName="Tavoite" />
-                <ScalarProperty Name="Lampo" ColumnName="Lampo" />
+                <ScalarProperty Name="OminaisuusId" ColumnName="OminaisuusId" />
+                <ScalarProperty Name="Tapahtuma" ColumnName="Tapahtuma" />
                 <ScalarProperty Name="Ajakohta" ColumnName="Ajakohta" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ominaisuudet">
+            <EntityTypeMapping TypeName="AlytaloModel.Ominaisuudet">
+              <MappingFragment StoreEntitySet="Ominaisuudet">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OminaisuusId" ColumnName="OminaisuusId" />
+                <ScalarProperty Name="Nimi" ColumnName="Nimi" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -221,19 +135,17 @@
             <EntityTypeMapping TypeName="AlytaloModel.Sauna">
               <MappingFragment StoreEntitySet="Sauna">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Talon_Id" ColumnName="Talon Id" />
                 <ScalarProperty Name="Kaynnissa" ColumnName="Kaynnissa" />
                 <ScalarProperty Name="Lampo" ColumnName="Lampo" />
-                <ScalarProperty Name="Ajakohta" ColumnName="Ajakohta" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Talo">
-            <EntityTypeMapping TypeName="AlytaloModel.Talo">
-              <MappingFragment StoreEntitySet="Talo">
+          <EntitySetMapping Name="Termostaatti">
+            <EntityTypeMapping TypeName="AlytaloModel.Termostaatti">
+              <MappingFragment StoreEntitySet="Termostaatti">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Nimi" ColumnName="Nimi" />
-                <ScalarProperty Name="Osoite" ColumnName="Osoite" />
+                <ScalarProperty Name="Tavoite" ColumnName="Tavoite" />
+                <ScalarProperty Name="Lampo" ColumnName="Lampo" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -241,10 +153,8 @@
             <EntityTypeMapping TypeName="AlytaloModel.Valot">
               <MappingFragment StoreEntitySet="Valot">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Talon_Id" ColumnName="Talon Id" />
                 <ScalarProperty Name="Kaynnissa" ColumnName="Kaynnissa" />
                 <ScalarProperty Name="Teho" ColumnName="Teho" />
-                <ScalarProperty Name="Ajakohta" ColumnName="Ajakohta" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

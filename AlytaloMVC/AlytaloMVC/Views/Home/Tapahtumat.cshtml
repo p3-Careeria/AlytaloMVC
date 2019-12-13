@@ -1,0 +1,42 @@
+﻿@model IEnumerable<AlytaloMVC.Models.TapahtumatViewModel>
+
+@{
+    ViewBag.Title = "Tapahtumat";
+}
+
+<h2>Tapahtumat</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tapahtuma)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Ajankohta)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tapahtuma)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ajankohta)
+            </td>
+            <td>
+                @Html.ActionLink("Delete", "DeleteTapahtuma", new { id = item.Id })
+            </td>
+        </tr>
+    }
+
+</table>

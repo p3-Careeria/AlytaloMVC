@@ -25,9 +25,10 @@ namespace AlytaloMVC
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Lampotila> Lampotila { get; set; }
+        public virtual DbSet<Loki> Loki { get; set; }
+        public virtual DbSet<Ominaisuudet> Ominaisuudet { get; set; }
         public virtual DbSet<Sauna> Sauna { get; set; }
-        public virtual DbSet<Talo> Talo { get; set; }
+        public virtual DbSet<Termostaatti> Termostaatti { get; set; }
         public virtual DbSet<Valot> Valot { get; set; }
     }
 }

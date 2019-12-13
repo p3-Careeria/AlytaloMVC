@@ -15,11 +15,7 @@ namespace AlytaloMVC
     public partial class Sauna
     {
         public int Id { get; set; }
-        public int Talon_Id { get; set; }
         public Nullable<bool> Kaynnissa { get; set; }
         public Nullable<int> Lampo { get; set; }
-        public Nullable<System.DateTime> Ajakohta { get; set; }
-    
-        public virtual Talo Talo { get; set; }
     }
 }

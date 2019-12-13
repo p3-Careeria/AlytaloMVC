@@ -12,10 +12,11 @@ namespace AlytaloMVC
     using System;
     using System.Collections.Generic;
     
-    public partial class Valot
+    public partial class Loki
     {
         public int Id { get; set; }
-        public Nullable<bool> Kaynnissa { get; set; }
-        public Nullable<int> Teho { get; set; }
+        public int OminaisuusId { get; set; }
+        public string Tapahtuma { get; set; }
+        public Nullable<System.DateTime> Ajakohta { get; set; }
     }
 }

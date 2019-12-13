@@ -12,14 +12,10 @@ namespace AlytaloMVC
     using System;
     using System.Collections.Generic;
     
-    public partial class Lampotila
+    public partial class Ominaisuudet
     {
         public int Id { get; set; }
-        public int Talon_Id { get; set; }
-        public Nullable<bool> Tavoite { get; set; }
-        public Nullable<int> Lampo { get; set; }
-        public Nullable<System.DateTime> Ajakohta { get; set; }
-    
-        public virtual Talo Talo { get; set; }
+        public int OminaisuusId { get; set; }
+        public string Nimi { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
@@ -12,81 +13,144 @@ namespace AlytaloMVC.Controllers
 {
     public class HomeController : Controller
     {
+        private bool tapahtumiaTKssa;
+
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult LuoTalo()
+        public ActionResult LuoOminaisuus()
         {
+
             return View();
+
         }
         [HttpPost]
-        public JsonResult LuoUusiTalo()
+        public JsonResult LisaaOminaisuus()
         {
             bool success = false;
             string error = "";
-
-            int length = (int)Request.InputStream.Length;
-            byte[] buffer = new byte[length];
-            int bytesRead = Request.InputStream.Read(buffer, 0, length);
-            string data = Encoding.UTF8.GetString(buffer, 0, bytesRead);
-            // Onko tarpeellinen?: if data = "null" tjsp -> return 
-
-            Debug.WriteLine("json: " + data);
-            TaloViewModel input = JsonConvert.DeserializeObject<TaloViewModel>(data);
+            string ominaisuus = "";
             AlytaloEntities entity = new AlytaloEntities();
 
             try
             {
-                Talo newTalo = new Talo();
-                newTalo.Nimi = input.Nimi;
-                newTalo.Osoite = input.Osoite;
+                using (Stream receiveStream = Request.InputStream)
+                {
+                    using (StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8))
+                    {
+                        ominaisuus = readStream.ReadToEnd();
+                    }
+                }
 
-                entity.Talo.Add(newTalo);
-                entity.SaveChanges();
-                success = true;
+
+                if (ominaisuus.Contains("Sauna"))
+                {
+                    Sauna newSauna = new Sauna();
+                    newSauna.Kaynnissa = false;
+                    newSauna.Lampo = 20;
+                    entity.Sauna.Add(newSauna);
+                    entity.SaveChanges();
+                    success = true;
+
+                }
+                else if (ominaisuus.Contains("Termostaatti"))
+                {
+
+                    Termostaatti newTermo = new Termostaatti();
+                    newTermo.Lampo = 20;
+                    newTermo.Tavoite = 20;
+                    entity.Termostaatti.Add(newTermo);
+                    entity.SaveChanges();
+                    success = true;
+                }
+                else if (ominaisuus.Contains("Valot"))
+                {
+                    Valot newValo = new Valot();
+                    newValo.Kaynnissa = false;
+                    newValo.Teho = 0;
+                    entity.Valot.Add(newValo);
+                    entity.SaveChanges();
+                    success = true;
+                }
 
             }
             catch (Exception e)
             {
                 error = e.GetType().Name + ": " + e.Message;
-
             }
             finally
             {
                 entity.Dispose();
             }
 
-            var result = new { success = success, error = error };
-            return Json(result);
+            var x = new { ominaisuus = ominaisuus, success = success, error = error };
+            return Json(x);
         }
 
-        public ActionResult Talot()
+        public ActionResult Tapahtumat()
+        {
+            AlytaloEntities entity = new AlytaloEntities();
+            List<TapahtumatViewModel> model = new List<TapahtumatViewModel>();
+            List<Loki> tiedot = entity.Loki.ToList();
+
+            if (!tiedot.Any())
+            {
+                tapahtumiaTKssa = false;
+                return Content("<script language='javascript' type='text/javascript'>" +
+                                "alert('Luo tietokantaan ensin ominaisuus');" +
+                                "window.location.href ='/home/LuoOminaisuus' ;" +
+                                "</script>");
+
+            }
+            else
+            {
+                tapahtumiaTKssa = true;
+                foreach (Loki tieto in tiedot)
+                {
+                    TapahtumatViewModel view = new TapahtumatViewModel();
+                    view.Id = tieto.Id;
+                    view.OminaisuudenId = tieto.OminaisuusId;
+                    view.Tapahtuma = tieto.Tapahtuma;
+                    view.Ajankohta = tieto.Ajakohta.Value;
+                    model.Add(view);
+                }
+            }
+            entity.Dispose();
+            return View(model);
+
+        }
+
+        public ActionResult DeleteTapahtuma(int? id)
         {
             AlytaloEntities entity = new AlytaloEntities();
 
-            List<TaloViewModel> model = new List<TaloViewModel>();
-            List<Talo> talot = entity.Talo.ToList();
-
-            if (!talot.Any())
+            if (id != null)
             {
-                return Content("<script language='javascript' type='text/javascript'>" +
-                                "alert('Luo tietokantaan ensin talo');" +
-                                "window.location.href ='/home/LuoTalo' ;"+
-                                "</script>");
-
-            } else
-            {
-
-
+                Loki tieto = entity.Loki.Find(id);
+                entity.Loki.Remove(tieto);
+                entity.SaveChanges();
 
             }
-            return View();
 
+            entity.Dispose();
+            Tapahtumat();
 
+            if (tapahtumiaTKssa)
+            {
+                return View("Tapahtumat");
+            }
+            else
+            {
+                return Content("<script language='javascript' type='text/javascript'>" +
+                    "alert('Tietokanta on tyhjä. Luo ensin ominaisuus');" +
+                    "window.location.href ='/home/LuoOminaisuus' ;" +
+                    "</script>");
+            }
         }
-
 
     }
 }
+
+

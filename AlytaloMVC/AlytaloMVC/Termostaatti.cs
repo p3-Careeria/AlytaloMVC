@@ -12,10 +12,10 @@ namespace AlytaloMVC
     using System;
     using System.Collections.Generic;
     
-    public partial class Valot
+    public partial class Termostaatti
     {
         public int Id { get; set; }
-        public Nullable<bool> Kaynnissa { get; set; }
-        public Nullable<int> Teho { get; set; }
+        public Nullable<int> Tavoite { get; set; }
+        public Nullable<int> Lampo { get; set; }
     }
 }
