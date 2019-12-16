@@ -14,8 +14,11 @@ namespace AlytaloMVC
     
     public partial class Sauna
     {
-        public int Id { get; set; }
+        public int SaunaId { get; set; }
+        public Nullable<int> OminaisuusId { get; set; }
         public Nullable<bool> Kaynnissa { get; set; }
         public Nullable<int> Lampo { get; set; }
+    
+        public virtual Ominaisuudet Ominaisuudet { get; set; }
     }
 }

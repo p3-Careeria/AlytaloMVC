@@ -14,8 +14,11 @@ namespace AlytaloMVC
     
     public partial class Valot
     {
-        public int Id { get; set; }
+        public int ValotId { get; set; }
+        public Nullable<int> OminaisuusId { get; set; }
         public Nullable<bool> Kaynnissa { get; set; }
         public Nullable<int> Teho { get; set; }
+    
+        public virtual Ominaisuudet Ominaisuudet { get; set; }
     }
 }

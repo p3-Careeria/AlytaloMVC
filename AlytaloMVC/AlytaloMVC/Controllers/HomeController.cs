@@ -32,6 +32,7 @@ namespace AlytaloMVC.Controllers
             bool success = false;
             string error = "";
             string ominaisuus = "";
+  
             AlytaloEntities entity = new AlytaloEntities();
 
             try
@@ -43,38 +44,15 @@ namespace AlytaloMVC.Controllers
                         ominaisuus = readStream.ReadToEnd();
                     }
                 }
+             
+                ominaisuus = ominaisuus.Substring(1, ominaisuus.Length-2);
 
-
-                if (ominaisuus.Contains("Sauna"))
-                {
-                    Sauna newSauna = new Sauna();
-                    newSauna.Kaynnissa = false;
-                    newSauna.Lampo = 20;
-                    entity.Sauna.Add(newSauna);
-                    entity.SaveChanges();
-                    success = true;
-
-                }
-                else if (ominaisuus.Contains("Termostaatti"))
-                {
-
-                    Termostaatti newTermo = new Termostaatti();
-                    newTermo.Lampo = 20;
-                    newTermo.Tavoite = 20;
-                    entity.Termostaatti.Add(newTermo);
-                    entity.SaveChanges();
-                    success = true;
-                }
-                else if (ominaisuus.Contains("Valot"))
-                {
-                    Valot newValo = new Valot();
-                    newValo.Kaynnissa = false;
-                    newValo.Teho = 0;
-                    entity.Valot.Add(newValo);
-                    entity.SaveChanges();
-                    success = true;
-                }
-
+                Ominaisuudet uusi = new Ominaisuudet();
+                uusi.Nimi = ominaisuus;
+                entity.Ominaisuudet.Add(uusi);
+                entity.SaveChanges();
+                success = true;
+                Debug.WriteLine(ominaisuus);
             }
             catch (Exception e)
             {
@@ -154,3 +132,33 @@ namespace AlytaloMVC.Controllers
 }
 
 
+//      if (ominaisuus.Contains("Sauna"))
+//                {
+//                    Sauna newSauna = new Sauna();
+//newSauna.Kaynnissa = false;
+//                    newSauna.Lampo = 20;
+//                    entity.Sauna.Add(newSauna);
+//                    entity.SaveChanges();
+//                    success = true;
+
+//                }
+//                else if (ominaisuus.Contains("Termostaatti"))
+//                {
+
+//                    Termostaatti newTermo = new Termostaatti();
+//newTermo.Lampo = 20;
+//                    newTermo.Tavoite = 20;
+//                    entity.Termostaatti.Add(newTermo);
+//                    entity.SaveChanges();
+//                    success = true;
+//                }
+//                else if (ominaisuus.Contains("Valot"))
+//                {
+//                    Valot newValo = new Valot();
+//newValo.Kaynnissa = false;
+//                    newValo.Teho = 0;
+//                    entity.Valot.Add(newValo);
+//                    entity.SaveChanges();
+//                    success = true;
+//                }
+                

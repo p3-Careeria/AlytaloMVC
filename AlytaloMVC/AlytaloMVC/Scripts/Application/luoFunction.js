@@ -17,4 +17,4 @@ function LuoOminaisuus(valinta) {
         dataType: "json"
     });
 }
-//# sourceMappingURL=LuoOminaisuusFunctions.js.map
+//# sourceMappingURL=luoFunction.js.map

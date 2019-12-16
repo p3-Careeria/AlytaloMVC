@@ -4,10 +4,13 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="AlytaloModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="AlytaloModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Alytalo.dbo.Loki' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Loki">
           <Key>
             <PropertyRef Name="Id" />
+            
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OminaisuusId" Type="int" Nullable="false" />
@@ -16,45 +19,101 @@
         </EntityType>
         <EntityType Name="Ominaisuudet">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="OminaisuusId" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="OminaisuusId" Type="int" Nullable="false" />
+          <Property Name="OminaisuusId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Nimi" Type="nvarchar" MaxLength="15" />
         </EntityType>
         <EntityType Name="Sauna">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="SaunaId" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SaunaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OminaisuusId" Type="int" />
           <Property Name="Kaynnissa" Type="bit" />
           <Property Name="Lampo" Type="int" />
         </EntityType>
         <EntityType Name="Termostaatti">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="TermoId" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TermoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OminaisuusId" Type="int" />
           <Property Name="Tavoite" Type="int" />
           <Property Name="Lampo" Type="int" />
         </EntityType>
         <EntityType Name="Valot">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="ValotId" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ValotId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OminaisuusId" Type="int" />
           <Property Name="Kaynnissa" Type="bit" />
           <Property Name="Teho" Type="int" />
         </EntityType>
+        <Association Name="FK_Sauna_Ominaisuudet">
+          <End Role="Ominaisuudet" Type="Self.Ominaisuudet" Multiplicity="0..1" />
+          <End Role="Sauna" Type="Self.Sauna" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ominaisuudet">
+              <PropertyRef Name="OminaisuusId" />
+            </Principal>
+            <Dependent Role="Sauna">
+              <PropertyRef Name="OminaisuusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Termostaatti_Ominaisuudet">
+          <End Role="Ominaisuudet" Type="Self.Ominaisuudet" Multiplicity="0..1" />
+          <End Role="Termostaatti" Type="Self.Termostaatti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ominaisuudet">
+              <PropertyRef Name="OminaisuusId" />
+            </Principal>
+            <Dependent Role="Termostaatti">
+              <PropertyRef Name="OminaisuusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Valot_Ominaisuudet">
+          <End Role="Ominaisuudet" Type="Self.Ominaisuudet" Multiplicity="0..1" />
+          <End Role="Valot" Type="Self.Valot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ominaisuudet">
+              <PropertyRef Name="OminaisuusId" />
+            </Principal>
+            <Dependent Role="Valot">
+              <PropertyRef Name="OminaisuusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="AlytaloModelStoreContainer">
-          <EntitySet Name="Loki" EntityType="Self.Loki" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ominaisuudet" EntityType="Self.Ominaisuudet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sauna" EntityType="Self.Sauna" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Termostaatti" EntityType="Self.Termostaatti" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Valot" EntityType="Self.Valot" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Loki" EntityType="Self.Loki" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Loki].[Id] AS [Id], 
+    [Loki].[OminaisuusId] AS [OminaisuusId], 
+    [Loki].[Tapahtuma] AS [Tapahtuma], 
+    [Loki].[Ajakohta] AS [Ajakohta]
+    FROM [dbo].[Loki] AS [Loki]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_Sauna_Ominaisuudet" Association="Self.FK_Sauna_Ominaisuudet">
+            <End Role="Ominaisuudet" EntitySet="Ominaisuudet" />
+            <End Role="Sauna" EntitySet="Sauna" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Termostaatti_Ominaisuudet" Association="Self.FK_Termostaatti_Ominaisuudet">
+            <End Role="Ominaisuudet" EntitySet="Ominaisuudet" />
+            <End Role="Termostaatti" EntitySet="Termostaatti" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Valot_Ominaisuudet" Association="Self.FK_Valot_Ominaisuudet">
+            <End Role="Ominaisuudet" EntitySet="Ominaisuudet" />
+            <End Role="Valot" EntitySet="Valot" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AlytaloModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -63,48 +122,122 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OminaisuusId" Type="Int32" Nullable="false" />
+          <Property Name="OminaisuusId" Nullable="false" Type="Int32" />
           <Property Name="Tapahtuma" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Ajakohta" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Ominaisuudet" Relationship="Self.FK_Loki_Ominaisuudet" FromRole="Loki" ToRole="Ominaisuudet" />
         </EntityType>
         <EntityType Name="Ominaisuudet">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="OminaisuusId" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OminaisuusId" Type="Int32" Nullable="false" />
+          <Property Name="OminaisuusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nimi" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Loki" Relationship="Self.FK_Loki_Ominaisuudet" FromRole="Ominaisuudet" ToRole="Loki" />
+          <NavigationProperty Name="Sauna" Relationship="Self.FK_Sauna_Ominaisuudet" FromRole="Ominaisuudet" ToRole="Sauna" />
+          <NavigationProperty Name="Termostaatti" Relationship="Self.FK_Termostaatti_Ominaisuudet" FromRole="Ominaisuudet" ToRole="Termostaatti" />
+          <NavigationProperty Name="Valot" Relationship="Self.FK_Valot_Ominaisuudet" FromRole="Ominaisuudet" ToRole="Valot" />
         </EntityType>
         <EntityType Name="Sauna">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="SaunaId" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SaunaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OminaisuusId" Type="Int32" />
           <Property Name="Kaynnissa" Type="Boolean" />
           <Property Name="Lampo" Type="Int32" />
+          <NavigationProperty Name="Ominaisuudet" Relationship="Self.FK_Sauna_Ominaisuudet" FromRole="Sauna" ToRole="Ominaisuudet" />
         </EntityType>
         <EntityType Name="Termostaatti">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="TermoId" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TermoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OminaisuusId" Type="Int32" />
           <Property Name="Tavoite" Type="Int32" />
           <Property Name="Lampo" Type="Int32" />
+          <NavigationProperty Name="Ominaisuudet" Relationship="Self.FK_Termostaatti_Ominaisuudet" FromRole="Termostaatti" ToRole="Ominaisuudet" />
         </EntityType>
         <EntityType Name="Valot">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="ValotId" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ValotId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OminaisuusId" Type="Int32" />
           <Property Name="Kaynnissa" Type="Boolean" />
           <Property Name="Teho" Type="Int32" />
+          <NavigationProperty Name="Ominaisuudet" Relationship="Self.FK_Valot_Ominaisuudet" FromRole="Valot" ToRole="Ominaisuudet" />
         </EntityType>
+        <Association Name="FK_Loki_Ominaisuudet">
+          <End Role="Ominaisuudet" Type="Self.Ominaisuudet" Multiplicity="1" />
+          <End Role="Loki" Type="Self.Loki" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ominaisuudet">
+              <PropertyRef Name="OminaisuusId" />
+            </Principal>
+            <Dependent Role="Loki">
+              <PropertyRef Name="OminaisuusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Sauna_Ominaisuudet">
+          <End Role="Ominaisuudet" Type="Self.Ominaisuudet" Multiplicity="0..1" />
+          <End Role="Sauna" Type="Self.Sauna" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ominaisuudet">
+              <PropertyRef Name="OminaisuusId" />
+            </Principal>
+            <Dependent Role="Sauna">
+              <PropertyRef Name="OminaisuusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Termostaatti_Ominaisuudet">
+          <End Role="Ominaisuudet" Type="Self.Ominaisuudet" Multiplicity="0..1" />
+          <End Role="Termostaatti" Type="Self.Termostaatti" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ominaisuudet">
+              <PropertyRef Name="OminaisuusId" />
+            </Principal>
+            <Dependent Role="Termostaatti">
+              <PropertyRef Name="OminaisuusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Valot_Ominaisuudet">
+          <End Role="Ominaisuudet" Type="Self.Ominaisuudet" Multiplicity="0..1" />
+          <End Role="Valot" Type="Self.Valot" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ominaisuudet">
+              <PropertyRef Name="OminaisuusId" />
+            </Principal>
+            <Dependent Role="Valot">
+              <PropertyRef Name="OminaisuusId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="AlytaloEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Loki" EntityType="Self.Loki" />
           <EntitySet Name="Ominaisuudet" EntityType="Self.Ominaisuudet" />
           <EntitySet Name="Sauna" EntityType="Self.Sauna" />
           <EntitySet Name="Termostaatti" EntityType="Self.Termostaatti" />
           <EntitySet Name="Valot" EntityType="Self.Valot" />
+          <AssociationSet Name="FK_Loki_Ominaisuudet" Association="Self.FK_Loki_Ominaisuudet">
+            <End Role="Ominaisuudet" EntitySet="Ominaisuudet" />
+            <End Role="Loki" EntitySet="Loki" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Sauna_Ominaisuudet" Association="Self.FK_Sauna_Ominaisuudet">
+            <End Role="Ominaisuudet" EntitySet="Ominaisuudet" />
+            <End Role="Sauna" EntitySet="Sauna" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Termostaatti_Ominaisuudet" Association="Self.FK_Termostaatti_Ominaisuudet">
+            <End Role="Ominaisuudet" EntitySet="Ominaisuudet" />
+            <End Role="Termostaatti" EntitySet="Termostaatti" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Valot_Ominaisuudet" Association="Self.FK_Valot_Ominaisuudet">
+            <End Role="Ominaisuudet" EntitySet="Ominaisuudet" />
+            <End Role="Valot" EntitySet="Valot" />
+          </AssociationSet>
         </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
@@ -125,7 +258,6 @@
           <EntitySetMapping Name="Ominaisuudet">
             <EntityTypeMapping TypeName="AlytaloModel.Ominaisuudet">
               <MappingFragment StoreEntitySet="Ominaisuudet">
-                <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="OminaisuusId" ColumnName="OminaisuusId" />
                 <ScalarProperty Name="Nimi" ColumnName="Nimi" />
               </MappingFragment>
@@ -134,7 +266,8 @@
           <EntitySetMapping Name="Sauna">
             <EntityTypeMapping TypeName="AlytaloModel.Sauna">
               <MappingFragment StoreEntitySet="Sauna">
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SaunaId" ColumnName="SaunaId" />
+                <ScalarProperty Name="OminaisuusId" ColumnName="OminaisuusId" />
                 <ScalarProperty Name="Kaynnissa" ColumnName="Kaynnissa" />
                 <ScalarProperty Name="Lampo" ColumnName="Lampo" />
               </MappingFragment>
@@ -143,7 +276,8 @@
           <EntitySetMapping Name="Termostaatti">
             <EntityTypeMapping TypeName="AlytaloModel.Termostaatti">
               <MappingFragment StoreEntitySet="Termostaatti">
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="TermoId" ColumnName="TermoId" />
+                <ScalarProperty Name="OminaisuusId" ColumnName="OminaisuusId" />
                 <ScalarProperty Name="Tavoite" ColumnName="Tavoite" />
                 <ScalarProperty Name="Lampo" ColumnName="Lampo" />
               </MappingFragment>
@@ -152,7 +286,8 @@
           <EntitySetMapping Name="Valot">
             <EntityTypeMapping TypeName="AlytaloModel.Valot">
               <MappingFragment StoreEntitySet="Valot">
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="ValotId" ColumnName="ValotId" />
+                <ScalarProperty Name="OminaisuusId" ColumnName="OminaisuusId" />
                 <ScalarProperty Name="Kaynnissa" ColumnName="Kaynnissa" />
                 <ScalarProperty Name="Teho" ColumnName="Teho" />
               </MappingFragment>

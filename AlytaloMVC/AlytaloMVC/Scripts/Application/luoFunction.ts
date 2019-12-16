@@ -10,7 +10,7 @@ function LuoOminaisuus(valinta: string) {
         contentType: "application/json",
         success: function (valinta) {
             if (valinta.success == true) {
-                alert(valinta + " lisätty");
+                alert(valinta.ominaisuus + " lisätty");
                 $(".result").html(valinta);
             } else {
                 alert("Tallennus epäonnistui " + valinta.error);

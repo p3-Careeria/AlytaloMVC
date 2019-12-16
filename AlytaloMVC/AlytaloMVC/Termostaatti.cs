@@ -14,8 +14,11 @@ namespace AlytaloMVC
     
     public partial class Termostaatti
     {
-        public int Id { get; set; }
+        public int TermoId { get; set; }
+        public Nullable<int> OminaisuusId { get; set; }
         public Nullable<int> Tavoite { get; set; }
         public Nullable<int> Lampo { get; set; }
+    
+        public virtual Ominaisuudet Ominaisuudet { get; set; }
     }
 }

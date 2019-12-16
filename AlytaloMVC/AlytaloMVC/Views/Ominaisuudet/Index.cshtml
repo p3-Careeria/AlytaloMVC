@@ -1,7 +1,79 @@
-﻿
+﻿@model AlytaloMVC.Models.OminaisuusViewModel
 @{
     ViewBag.Title = "Index";
 }
+@section scripts {
+    <script src="~/Scripts/Application/OminaisuusFunctions.js"></script>
+}
+<p>&nbsp;</p>
+<h2>Talon ominaisuudet</h2>
+<h3>Saunat:</h3>
+<div class="row">
+    @{ string tilanne = "";}
+    @foreach (var sauna in Model.Saunat)
+    {
+        int x = sauna.SaunaId - 1000;
+        if (sauna.Kaynnissa.Value) { tilanne = "Sauna on päällä!"; } else { tilanne = "Sauna on pois päältä"; };
 
-<h2>Index</h2>
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Sauna @x</h4>
+                    <p class="card-text" id="saunanTilsu">@tilanne</p>
+                    <p class="card-text">Lämpötila: @sauna.Lampo</p>
+                    <a href="#" class="card-link">Säädä</a>
+                    <a href="#" class="card-link">@Html.ActionLink("Poista", "PoistaOminaisuus", new { id = sauna.OminaisuusId })</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<p>&nbsp;</p>
+<h3>Termostaatit:</h3>
+<div class="row">
+    @{ tilanne = "";}
+    @foreach (var termostaatti in Model.Termostaatit)
+    {
+        int x = termostaatti.TermoId - 1000;
 
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Termostaatti @x</h4>
+                    <p class="card-text">Tavoite: @termostaatti.Tavoite</p>
+                    <p class="card-text">Lämpötila: @termostaatti.Lampo</p>
+                    <a href="#" class="card-link">Säädä</a>
+                    <a href="#" class="card-link">@Html.ActionLink("Poista", "PoistaOminaisuus", new { id = termostaatti.OminaisuusId })</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<p>&nbsp;</p>
+<h3>Valot:</h3>
+<div class="row">
+    @{ tilanne = "";}
+    @foreach (var valot in Model.Valot)
+    {
+        int x = valot.ValotId - 1000;
+      if (valot.Kaynnissa.Value) { tilanne = "Valo on päällä!"; } else { tilanne = "Valo on pois päältä"; };
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Valo @x</h4>
+                    <p class="card-text">Teho: @valot.Teho</p>
+                    <p class="card-text"> @tilanne</p>
+                    <a href="#" class="card-link">Säädä</a>
+                    <a href="#" class="card-link">@Html.ActionLink("Poista", "PoistaOminaisuus", new { id = valot.OminaisuusId })</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@*Tähän tarvii jonkun refressauksen tyylii kerran sekunnissa joka päivittää noita arvoja
+
+
+
+*@

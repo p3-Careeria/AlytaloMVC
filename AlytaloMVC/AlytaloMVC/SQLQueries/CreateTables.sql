@@ -6,44 +6,54 @@ DROP TABLE Loki
 DROP TABLE Ominaisuudet
 -- proseduuri joka lisää ne toisiin tauluihin ja asettaa niille jonkin oletus arvon? 
 
+CREATE TABLE [dbo].[Ominaisuudet] 
+(
+	[OminaisuusId] INT NOT NULL PRIMARY KEY IDENTITY(1000, 1), 
+	[Nimi] NVARCHAR(15) NULL,
+)
 
 CREATE TABLE [dbo].[Sauna]
 (
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1000, 1), 
+	[SaunaId] INT NOT NULL PRIMARY KEY IDENTITY(1000, 1), 
+	[OminaisuusId] INT NULL,
 	[Kaynnissa] BIT NULL,
 	[Lampo] INT NULL, 
+	CONSTRAINT [FK_Sauna_Ominaisuudet] FOREIGN KEY ([OminaisuusId]) REFERENCES [Ominaisuudet]([OminaisuusId]),
 )
 CREATE TABLE [dbo].[Valot]
 (
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1000, 1), 
+	[ValotId] INT NOT NULL PRIMARY KEY IDENTITY(1000, 1), 
+	[OminaisuusId] INT NULL,
 	[Kaynnissa] BIT NULL,
 	[Teho] INT NULL, 
+		CONSTRAINT [FK_Valot_Ominaisuudet] FOREIGN KEY ([OminaisuusId]) REFERENCES [Ominaisuudet]([OminaisuusId]),
 )
 CREATE TABLE [dbo].[Termostaatti]
 (
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1000, 1), 
+	[TermoId] INT NOT NULL PRIMARY KEY IDENTITY(1000, 1), 
+	[OminaisuusId] INT NULL,
 	[Tavoite] INT NULL,
 	[Lampo] INT NULL, 
+		CONSTRAINT [FK_Termostaatti_Ominaisuudet] FOREIGN KEY ([OminaisuusId]) REFERENCES [Ominaisuudet]([OminaisuusId]),
 
 )
-CREATE TABLE [dbo].[Ominaisuudet] 
-(
-	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1000, 1), 
-	[OminaisuusId] INT NOT NULL,
-	[Nimi] NVARCHAR(15) NULL,
-)
+
 CREATE TABLE [dbo].[Loki]
 (
 	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1000, 1), 
 	[OminaisuusId] INT NOT NULL,
 	[Tapahtuma] NVARCHAR(100) NULL,
 	[Ajakohta] DATETIME NULL,
-	
+	CONSTRAINT [FK_Loki_Ominaisuudet] FOREIGN KEY ([OminaisuusId]) REFERENCES [Ominaisuudet]([OminaisuusId]),
 )
 
 
 
 
+-- tauluihin FK:ksi Ominaisuus taulun ID nro 
+--triggeri vastakkaiseksi kuin nyt? 
+-- Eli se triggaa kun viedään ominaisuus tauluun ja if nimi on X, Y Z niin se sijoittaa sen myös oikeaan alitauluun? 
+-- INSTEAD OF 
 
 ---------------------------------------
 -----------------------------------------------------------------------------------------------------------
