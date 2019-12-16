@@ -10,7 +10,7 @@ function LuoOminaisuus(valinta: string) {
         contentType: "application/json",
         success: function (valinta) {
             if (valinta.success == true) {
-                alert(valinta.ominaisuus.substring(1, valinta.ominaisuus.length - 1) + " lisätty");
+                alert(valinta + " lisätty");
                 $(".result").html(valinta);
             } else {
                 alert("Tallennus epäonnistui " + valinta.error);
@@ -20,4 +20,3 @@ function LuoOminaisuus(valinta: string) {
     });
 
 }
-
