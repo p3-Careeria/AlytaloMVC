@@ -1,0 +1,20 @@
+﻿@model AlytaloMVC.Models.OminaisuusViewModel
+    <div class="row">
+  
+        @foreach (var termostaatti in Model.Termostaatit)
+        {
+            int x = termostaatti.TermoId - 999;
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Termostaatti @x</h4>
+                        <p class="card-text">Tavoite: @termostaatti.Tavoite</p>
+                        <p class="card-text">Lämpötila: @termostaatti.Lampo</p>
+                        <a href="#" class="card-link">Säädä</a>
+                        <a href="#" class="card-link">@Html.ActionLink("Poista", "PoistaOminaisuus", new { id = termostaatti.OminaisuusId })</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>

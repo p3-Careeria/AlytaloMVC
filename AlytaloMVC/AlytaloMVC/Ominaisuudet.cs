@@ -17,7 +17,6 @@ namespace AlytaloMVC
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Ominaisuudet()
         {
-            this.Loki = new HashSet<Loki>();
             this.Sauna = new HashSet<Sauna>();
             this.Termostaatti = new HashSet<Termostaatti>();
             this.Valot = new HashSet<Valot>();
@@ -26,8 +25,6 @@ namespace AlytaloMVC
         public int OminaisuusId { get; set; }
         public string Nimi { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Loki> Loki { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Sauna> Sauna { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

@@ -1,7 +1,7 @@
 ----------------------- INSERT -----------------------
 ------------------------------------------------------
 
-ALTER TRIGGER Tr_OminaisuusInsert ON Ominaisuudet
+CREATE TRIGGER Tr_OminaisuusInsert ON Ominaisuudet
 AFTER INSERT 
 AS 
 	SET NOCOUNT ON 
@@ -38,7 +38,7 @@ GO
 ----------------------- DELETE -----------------------
 ------------------------------------------------------
 
-ALTER TRIGGER Tr_OminaisuusDelete ON Ominaisuudet 
+CREATE TRIGGER Tr_OminaisuusDelete ON Ominaisuudet 
 INSTEAD OF DELETE 
 AS 
 	DECLARE @Nimi NVARCHAR(15); 

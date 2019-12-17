@@ -1,0 +1,92 @@
+@model AlytaloMVC.Models.OminaisuusViewModel
+@{
+    ViewBag.Title = "Index";
+}
+@section scripts {
+    <script src="~/Scripts/Application/OminaisuusFunctions.js"></script>
+}
+<p>&nbsp;</p>
+<h2>Talon ominaisuudet</h2>
+<h3>Saunat:</h3>
+<div class="row">
+    @{ string tilanne = "";}
+    @foreach (var sauna in Model.Saunat)
+    {
+        int x = sauna.SaunaId - 999;
+        if (sauna.Kaynnissa.Value) { tilanne = "Sauna on p‰‰ll‰!"; } else { tilanne = "Sauna on pois p‰‰lt‰"; };
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Sauna @x</h4>
+                    <p class="card-text" id="saunanTilsu">@tilanne</p>
+                    <p class="card-text">L‰mpˆtila: @sauna.Lampo</p>
+                    <a href="#" class="card-link">S‰‰d‰</a>
+                    <a href="#" class="card-link">@Html.ActionLink("Poista", "PoistaOminaisuus", new { id = sauna.OminaisuusId })</a>
+                </div>
+            </div>
+        </div>
+        if(!sauna.Kaynnissa.Value)
+        {<script>document.getElementsByClassName("card-body").SetAttribute("background", "red"); </script> };
+    }
+</div>
+<p>&nbsp;</p>
+<h3>Termostaatit:</h3>
+<div class="row">
+    @{ tilanne = "";}
+    @foreach (var termostaatti in Model.Termostaatit)
+    {
+        int x = termostaatti.TermoId - 999;
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Termostaatti @x</h4>
+                    <p class="card-text">Tavoite: @termostaatti.Tavoite</p>
+                    <p class="card-text">L‰mpˆtila: @termostaatti.Lampo</p>
+                    <a href="#" class="card-link">S‰‰d‰</a>
+                    <a href="#" class="card-link">@Html.ActionLink("Poista", "PoistaOminaisuus", new { id = termostaatti.OminaisuusId })</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<p>&nbsp;</p>
+<h3>Valot:</h3>
+<div class="row">
+    @{ tilanne = "";}
+    @foreach (var valot in Model.Valot)
+    {
+        int x = valot.ValotId - 999;
+      if (valot.Kaynnissa.Value) { tilanne = "Valo on p‰‰ll‰!"; } else { tilanne = "Valo on pois p‰‰lt‰"; };
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Valo @x</h4>
+                    <p class="card-text">Teho: @valot.Teho</p>
+                    <p class="card-text"> @tilanne</p>
+                    <a href="#" class="card-link">S‰‰d‰</a>
+                    <a href="#" class="card-link">@Html.ActionLink("Poista", "PoistaOminaisuus", new { id = valot.OminaisuusId })</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@*T‰h‰n tarvii jonkun refressauksen tyylii kerran sekunnissa joka p‰ivitt‰‰ noita arvoja
+  Kannattaisiko se koodi toteuttaa c#:ssa vai JS:ll‰ .. hmmmm 
+
+    silloin varsinaiset p‰ivitykset voi toteuttaa c#:ssa ja tuoda aina uuden n‰kym‰n esim joka sekuntti 
+
+    PARTIAL view refreshauksista netiss‰ ... n‰kˆj‰‰n usempia muttei varsinaisesta viewin refreshist‰
+
+    1. Eli miten t‰m‰ partial view:si?
+        -- Erikseen ja vissiin kannattaa heitt‰‰ JSON:n 
+
+    2. Miten korttin‰kym‰ss‰?
+
+    https://stackoverflow.com/questions/31082741/refresh-partial-view-div-in-mvc-5
+    https://www.codeproject.com/Articles/177335/Refreshing-content-of-the-table-using-AJAX-in-ASP
+    https://www.c-sharpcorner.com/blogs/auto-refresh-a-partial-view-of-a-page-in-mvc1
+*@

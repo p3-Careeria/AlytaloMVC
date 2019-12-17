@@ -18,7 +18,5 @@ namespace AlytaloMVC
         public int OminaisuusId { get; set; }
         public string Tapahtuma { get; set; }
         public Nullable<System.DateTime> Ajakohta { get; set; }
-    
-        public virtual Ominaisuudet Ominaisuudet { get; set; }
     }
 }

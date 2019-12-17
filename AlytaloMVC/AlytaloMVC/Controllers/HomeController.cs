@@ -130,35 +130,3 @@ namespace AlytaloMVC.Controllers
 
     }
 }
-
-
-//      if (ominaisuus.Contains("Sauna"))
-//                {
-//                    Sauna newSauna = new Sauna();
-//newSauna.Kaynnissa = false;
-//                    newSauna.Lampo = 20;
-//                    entity.Sauna.Add(newSauna);
-//                    entity.SaveChanges();
-//                    success = true;
-
-//                }
-//                else if (ominaisuus.Contains("Termostaatti"))
-//                {
-
-//                    Termostaatti newTermo = new Termostaatti();
-//newTermo.Lampo = 20;
-//                    newTermo.Tavoite = 20;
-//                    entity.Termostaatti.Add(newTermo);
-//                    entity.SaveChanges();
-//                    success = true;
-//                }
-//                else if (ominaisuus.Contains("Valot"))
-//                {
-//                    Valot newValo = new Valot();
-//newValo.Kaynnissa = false;
-//                    newValo.Teho = 0;
-//                    entity.Valot.Add(newValo);
-//                    entity.SaveChanges();
-//                    success = true;
-//                }
-                

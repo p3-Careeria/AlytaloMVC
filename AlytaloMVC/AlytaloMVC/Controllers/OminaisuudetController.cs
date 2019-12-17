@@ -37,6 +37,24 @@ namespace AlytaloMVC.Controllers
             return View(taulut);
 
         }
+
+        public ActionResult SaunatPartial()
+        {
+            //AlytaloEntities entities = new AlytaloEntities();
+            //var saunat = new OminaisuusViewModel { Saunat = entities.Sauna.ToList() };
+            //entities.Dispose(); 
+            Debug.WriteLine("SAUNAPARTIAL");
+            return PartialView(); 
+        }
+        public ActionResult TermoPartial()
+        {
+            return PartialView();
+        }
+        public ActionResult ValotPartial()
+        {
+            return PartialView();
+        }
+
         public ActionResult PoistaOminaisuus(int? id)
         {
             if (id != null)
@@ -56,8 +74,7 @@ namespace AlytaloMVC.Controllers
         }
 
 
-        // toi poisto pitäisi tapahtua ensin päätaulusta ja triggerillä muualta, jolloin kirjaantuu myös lokiin tapahtumaksi
-    }
+     }
 }
 
 

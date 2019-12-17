@@ -4,13 +4,10 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="AlytaloModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'Alytalo.dbo.Loki' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+      <Schema Namespace="AlytaloModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Loki">
           <Key>
             <PropertyRef Name="Id" />
-            
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OminaisuusId" Type="int" Nullable="false" />
@@ -88,18 +85,11 @@ warning 6002: The table/view 'Alytalo.dbo.Loki' does not have a primary key defi
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="AlytaloModelStoreContainer">
+          <EntitySet Name="Loki" EntityType="Self.Loki" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Ominaisuudet" EntityType="Self.Ominaisuudet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Sauna" EntityType="Self.Sauna" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Termostaatti" EntityType="Self.Termostaatti" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Valot" EntityType="Self.Valot" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Loki" EntityType="Self.Loki" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [Loki].[Id] AS [Id], 
-    [Loki].[OminaisuusId] AS [OminaisuusId], 
-    [Loki].[Tapahtuma] AS [Tapahtuma], 
-    [Loki].[Ajakohta] AS [Ajakohta]
-    FROM [dbo].[Loki] AS [Loki]</DefiningQuery>
-          </EntitySet>
           <AssociationSet Name="FK_Sauna_Ominaisuudet" Association="Self.FK_Sauna_Ominaisuudet">
             <End Role="Ominaisuudet" EntitySet="Ominaisuudet" />
             <End Role="Sauna" EntitySet="Sauna" />
@@ -113,7 +103,8 @@ warning 6002: The table/view 'Alytalo.dbo.Loki' does not have a primary key defi
             <End Role="Valot" EntitySet="Valot" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AlytaloModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -122,10 +113,9 @@ warning 6002: The table/view 'Alytalo.dbo.Loki' does not have a primary key defi
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OminaisuusId" Nullable="false" Type="Int32" />
+          <Property Name="OminaisuusId" Type="Int32" Nullable="false" />
           <Property Name="Tapahtuma" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Ajakohta" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="Ominaisuudet" Relationship="Self.FK_Loki_Ominaisuudet" FromRole="Loki" ToRole="Ominaisuudet" />
         </EntityType>
         <EntityType Name="Ominaisuudet">
           <Key>
@@ -133,7 +123,6 @@ warning 6002: The table/view 'Alytalo.dbo.Loki' does not have a primary key defi
           </Key>
           <Property Name="OminaisuusId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Nimi" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Loki" Relationship="Self.FK_Loki_Ominaisuudet" FromRole="Ominaisuudet" ToRole="Loki" />
           <NavigationProperty Name="Sauna" Relationship="Self.FK_Sauna_Ominaisuudet" FromRole="Ominaisuudet" ToRole="Sauna" />
           <NavigationProperty Name="Termostaatti" Relationship="Self.FK_Termostaatti_Ominaisuudet" FromRole="Ominaisuudet" ToRole="Termostaatti" />
           <NavigationProperty Name="Valot" Relationship="Self.FK_Valot_Ominaisuudet" FromRole="Ominaisuudet" ToRole="Valot" />
@@ -168,18 +157,6 @@ warning 6002: The table/view 'Alytalo.dbo.Loki' does not have a primary key defi
           <Property Name="Teho" Type="Int32" />
           <NavigationProperty Name="Ominaisuudet" Relationship="Self.FK_Valot_Ominaisuudet" FromRole="Valot" ToRole="Ominaisuudet" />
         </EntityType>
-        <Association Name="FK_Loki_Ominaisuudet">
-          <End Role="Ominaisuudet" Type="Self.Ominaisuudet" Multiplicity="1" />
-          <End Role="Loki" Type="Self.Loki" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Ominaisuudet">
-              <PropertyRef Name="OminaisuusId" />
-            </Principal>
-            <Dependent Role="Loki">
-              <PropertyRef Name="OminaisuusId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Sauna_Ominaisuudet">
           <End Role="Ominaisuudet" Type="Self.Ominaisuudet" Multiplicity="0..1" />
           <End Role="Sauna" Type="Self.Sauna" Multiplicity="*" />
@@ -222,10 +199,6 @@ warning 6002: The table/view 'Alytalo.dbo.Loki' does not have a primary key defi
           <EntitySet Name="Sauna" EntityType="Self.Sauna" />
           <EntitySet Name="Termostaatti" EntityType="Self.Termostaatti" />
           <EntitySet Name="Valot" EntityType="Self.Valot" />
-          <AssociationSet Name="FK_Loki_Ominaisuudet" Association="Self.FK_Loki_Ominaisuudet">
-            <End Role="Ominaisuudet" EntitySet="Ominaisuudet" />
-            <End Role="Loki" EntitySet="Loki" />
-          </AssociationSet>
           <AssociationSet Name="FK_Sauna_Ominaisuudet" Association="Self.FK_Sauna_Ominaisuudet">
             <End Role="Ominaisuudet" EntitySet="Ominaisuudet" />
             <End Role="Sauna" EntitySet="Sauna" />
