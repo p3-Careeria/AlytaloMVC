@@ -332,7 +332,8 @@
     <Content Include="Views\Home\Tapahtumat.cshtml" />
     <Content Include="Views\Ominaisuudet\Index.cshtml" />
     <Content Include="Views\Ominaisuudet\OminaisuudetPartial.cshtml" />
-    <Content Include="Views\Ominaisuudet\SetSauna.cshtml" />
+    <Content Include="Views\Ominaisuudet\SaadaTermo.cshtml" />
+    <Content Include="Views\Ominaisuudet\SaadaValo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

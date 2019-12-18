@@ -8,7 +8,7 @@
         int x = sauna.SaunaId - 999;
         if (sauna.Kaynnissa.Value) { tilanne = "Sauna on päällä!"; kytke = "Sammuta | "; } else { tilanne = "Sauna on pois päältä"; kytke = "Käynnistä | "; };
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Sauna @x</h4>
@@ -29,13 +29,13 @@
     {
         int x = termostaatti.TermoId - 999;
 
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Termostaatti @x</h4>
                     <p class="card-text">Tavoite: @termostaatti.Tavoite</p>
                     <p class="card-text">Lämpötila: @termostaatti.Lampo</p>
-                    <a href="#" class="card-link"></a>
+                    <a href="#" class="card-link">@Html.ActionLink("Säädä | ", "SaadaTermo", new { id = termostaatti.TermoId }) </a>
                     <a href="#" class="card-link">@Html.ActionLink("Poista", "PoistaOminaisuus", new { id = termostaatti.OminaisuusId })</a>
                 </div>
             </div>
@@ -49,15 +49,15 @@
     @foreach (var valot in Model.Valot)
     {
         int x = valot.ValotId - 999;
-        if (valot.Kaynnissa.Value) { tilanne = "Valo on päällä!"; } else { tilanne = "Valo on pois päältä"; };
-
-        <div class="col-md-4">
+        if (valot.Kaynnissa.Value || valot.Teho.Value != 0) { tilanne = "Valo on päällä"; } else { tilanne = "Valo on pois päältä"; };
+        //TODO: vaihdtaakko kaynnissa.value vertailuksi siitä onko teho == 0?? 
+        <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Valo @x</h4>
                     <p class="card-text">Teho: @valot.Teho</p>
                     <p class="card-text"> @tilanne</p>
-                    <a href="#" class="card-link">Säädä</a>
+                    <a href="#" class="card-link">@Html.ActionLink("Säädä | ", "SaadaValo", new { id = valot.ValotId })</a>
                     <a href="#" class="card-link">@Html.ActionLink("Poista", "PoistaOminaisuus", new { id = valot.OminaisuusId })</a>
                 </div>
             </div>
