@@ -2,11 +2,11 @@
 
 <h3>Saunat:</h3>
 <div class="row">
-    @{ string tilanne = "";}
+    @{ string tilanne = ""; string kytke = "";}
     @foreach (var sauna in Model.Saunat)
     {
         int x = sauna.SaunaId - 999;
-        if (sauna.Kaynnissa.Value) { tilanne = "Sauna on päällä!"; } else { tilanne = "Sauna on pois päältä"; };
+        if (sauna.Kaynnissa.Value) { tilanne = "Sauna on päällä!"; kytke = "Sammuta | "; } else { tilanne = "Sauna on pois päältä"; kytke = "Käynnistä | "; };
 
         <div class="col-md-4">
             <div class="card">
@@ -14,7 +14,7 @@
                     <h4 class="card-title">Sauna @x</h4>
                     <p class="card-text" id="saunanTilsu">@tilanne</p>
                     <p class="card-text">Lämpötila: @sauna.Lampo</p>
-                    <a href="#" class="card-link">Säädä</a>
+                    <a href="#" class="card-link">@Html.ActionLink(kytke, "SetSauna", new { id = sauna.SaunaId })</a>
                     <a href="#" class="card-link">@Html.ActionLink("Poista", "PoistaOminaisuus", new { id = sauna.OminaisuusId })</a>
                 </div>
             </div>
@@ -35,7 +35,7 @@
                     <h4 class="card-title">Termostaatti @x</h4>
                     <p class="card-text">Tavoite: @termostaatti.Tavoite</p>
                     <p class="card-text">Lämpötila: @termostaatti.Lampo</p>
-                    <a href="#" class="card-link">Säädä</a>
+                    <a href="#" class="card-link"></a>
                     <a href="#" class="card-link">@Html.ActionLink("Poista", "PoistaOminaisuus", new { id = termostaatti.OminaisuusId })</a>
                 </div>
             </div>
