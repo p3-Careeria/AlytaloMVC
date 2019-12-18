@@ -1,66 +1,29 @@
-﻿@model AlytaloMVC.Models.OminaisuusViewModel
+﻿
 @{
-    ViewBag.Title = "Index";
-}
-@section scripts{
-
+    ViewBag.Title = "Talon ominaisuudet";
 }
 <p>&nbsp;</p>
 <h2>Talon ominaisuudet</h2>
-<h3>Saunat:</h3>
-<div>
-    @Html.Partial("SaunaPartial")
-</div>
-<p>&nbsp;</p>
-<h3>Termostaatit:</h3>
-<div>
-    @Html.Partial("TermoPartial")
-</div>
-<p>&nbsp;</p>
-<h3>Valot:</h3>
-<div class="korttiNakyma">
-    @Html.Partial("ValotPartial")
+<div id="OminaisuudetList">
 </div>
 
-https://stackoverflow.com/questions/30284753/populating-table-in-a-partial-view
-
-@*Tähän tarvii jonkun refressauksen tyylii kerran sekunnissa joka päivittää noita arvoja
-        Kannattaisiko se koodi toteuttaa c#:ssa vai JS:llä .. hmmmm
-
-          silloin varsinaiset päivitykset voi toteuttaa c#:ssa ja tuoda aina uuden näkymän esim joka sekuntti
-
-          PARTIAL view refreshauksista netissä ... näköjään usempia muttei varsinaisesta viewin refreshistä
-
-          1. Eli miten tämä partial view:si?
-              -- Erikseen ja vissiin kannattaa heittää JSON:n
-
-          2. Miten korttinäkymässä?
-
-          https://stackoverflow.com/questions/31082741/refresh-partial-view-div-in-mvc-5
-          https://www.codeproject.com/Articles/177335/Refreshing-content-of-the-table-using-AJAX-in-ASP
-          https://www.c-sharpcorner.com/blogs/auto-refresh-a-partial-view-of-a-page-in-mvc1
-
-
-        function loadPartialView() {
-       $.ajax({
-        url: "@Url.Action("ActionName", "ControllerName")",
-        type: 'GET', // <-- make a async request by GET
-        dataType: 'html', // <-- to expect an html response
-        success: function(result) {
-                    $('#YourDiv').html(result);
-                 }
-       });
-    }
-
-    $(function() {
-
-       loadPartialView(); // first time
-
-       // re-call the function each 5 seconds
-       window.setInterval("loadPartialView()", 5000);
-
-    });
-
-
-
-*@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+    setInterval(function () {
+        $(document).ready(function () {
+            $.ajax({
+                url: '/Ominaisuudet/GetOminaisuudet',
+                datatype: "json",
+                type: "post",
+                contenttype: 'application/json; charset=utf-8',
+                async: true,
+                success: function (data) {
+                    $("#OminaisuudetList").html(data);
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            });
+        });
+    }, 1000);
+</script>  

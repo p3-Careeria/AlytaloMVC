@@ -11,11 +11,21 @@ namespace AlytaloMVC.Controllers
 {
     public class OminaisuudetController : Controller
     {
+        private int i = 0;
         // GET: Ominaisuudet
         public ActionResult Index()
         {
-            AlytaloEntities entities = new AlytaloEntities();
+            this.i++; 
+            return View();
 
+        }
+
+        [HttpPost]
+        public ActionResult GetOminaisuudet()
+        {
+            i++;
+            Debug.WriteLine("Kutsu toimii: "+i);
+            AlytaloEntities entities = new AlytaloEntities();
 
             var taulut = new OminaisuusViewModel
             {
@@ -24,9 +34,6 @@ namespace AlytaloMVC.Controllers
                 Valot = entities.Valot.ToList()
 
             };
-
-            entities.Dispose();
-
             if (!taulut.Saunat.Any() && !taulut.Termostaatit.Any() && !taulut.Valot.Any())
             {
                 return Content("<script language='javascript' type='text/javascript'>" +
@@ -34,26 +41,11 @@ namespace AlytaloMVC.Controllers
                      "window.location.href ='/home/LuoOminaisuus' ;" +
                      "</script>");
             }
-            return View(taulut);
+            entities.Dispose(); 
+            return PartialView("OminaisuudetPartial", taulut);
 
         }
 
-        public ActionResult SaunatPartial()
-        {
-            //AlytaloEntities entities = new AlytaloEntities();
-            //var saunat = new OminaisuusViewModel { Saunat = entities.Sauna.ToList() };
-            //entities.Dispose(); 
-            Debug.WriteLine("SAUNAPARTIAL");
-            return PartialView(); 
-        }
-        public ActionResult TermoPartial()
-        {
-            return PartialView();
-        }
-        public ActionResult ValotPartial()
-        {
-            return PartialView();
-        }
 
         public ActionResult PoistaOminaisuus(int? id)
         {
@@ -66,15 +58,14 @@ namespace AlytaloMVC.Controllers
                 entities.Dispose();
 
             }
-            
+
             Index();
             return Content("<script language='javascript' type='text/javascript'>" +
                             "window.location.href ='/Ominaisuudet' ;" +
                               "</script>");
         }
 
+    }
 
-     }
 }
-
 
