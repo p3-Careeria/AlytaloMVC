@@ -13,9 +13,7 @@ namespace AlytaloMVC.Controllers
 {
     public class OminaisuudetController : Controller
     {
-       private int talonLampo = 20; // TODO:    tämä ei toimi tässä refrenssiksi alla, koska ilmeisesti tulee luotua joka kerta uudelleen kun sivulle palataan ... 
-                                               // johonkin metodiin (private int talon lämpö()) jos se palautetaan refrenssiksi  
-                                               // taitaa muuten tarvita myös parametrin, joka on esim termostaatin uusi arvo? Vai iteroi termostaattien lampotilat ja palauttaa niiden keskiarvon 
+
         public ActionResult Index()
         {
             return View();
@@ -104,16 +102,19 @@ namespace AlytaloMVC.Controllers
                     int uusiLampo = sauna.Lampo.Value + 1;
                     sauna.Lampo = uusiLampo;
                 }
-                else if (!sauna.Kaynnissa.Value && sauna.Lampo > talonLampo)
+                else if (!sauna.Kaynnissa.Value && sauna.Lampo > TalonLampotila())
                 {
-                    int uusiLampo = sauna.Lampo.Value - 2;
+                    int uusiLampo = sauna.Lampo.Value - 1;
                     sauna.Lampo = uusiLampo;
+                }
+                else
+                {
+                    sauna.Lampo = TalonLampotila();
                 }
             }
             entities.SaveChanges();
             entities.Dispose();
         }
-        // TODO: Loki päivitykset ... Tsekkaa myös SQL-triggeri "after insert" - ei näköjään luo ominaisuusId:tä muualle kuin saunaan 
         public ActionResult SaadaTermo(int? id)
         {
             if (id == null)
@@ -133,13 +134,26 @@ namespace AlytaloMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SaadaTermo([Bind(Include = "TermoId, OminaisuusId, Lampo, Tavoite")] Termostaatti termostaatti)
         {
+
             AlytaloEntities entities = new AlytaloEntities();
+
+
             if (ModelState.IsValid)
             {
+
                 entities.Entry(termostaatti).State = EntityState.Modified;
+
+                Loki uusiKirjaus = new Loki
+                {
+                    OminaisuusId = termostaatti.OminaisuusId.Value,
+                    Tapahtuma = "Termostaatille asetettu uusi tavoitelämpötila",
+                    Ajakohta = DateTime.Now
+                };
+                entities.Loki.Add(uusiKirjaus);
                 entities.SaveChanges();
             }
 
+            entities.Dispose();
             return View("Index");
         }
         private void TermoLampo()
@@ -147,35 +161,55 @@ namespace AlytaloMVC.Controllers
             AlytaloEntities entities = new AlytaloEntities();
             foreach (Termostaatti termostaatti in entities.Termostaatti)
             {
-                if (termostaatti.Lampo.Value < termostaatti.Tavoite.Value)
-                {
+                if (termostaatti.Lampo.Value < termostaatti.Tavoite.Value)  // heitä tämä toisto parametrilliseen metodiin jossa parametriks - tai +1, palautus arvoksiko int (?)  
+                {                                                           // mites Or || tähän kohtaan jolloin loki kirjaantuu vain kerran? 
                     int uusiLampo = termostaatti.Lampo.Value + 1;
                     termostaatti.Lampo = uusiLampo;
-                    this.talonLampo = termostaatti.Lampo.Value;
+
+                    if (termostaatti.Lampo.Value == termostaatti.Tavoite.Value)
+                    {
+                        Loki uusiKirjaus = new Loki
+                        {
+                            OminaisuusId = termostaatti.OminaisuusId.Value,
+                            Tapahtuma = "Termostaatin tavoitelämpötila "+termostaatti.Lampo + "°C saavutettu",
+                            Ajakohta = DateTime.Now
+                        };
+                        entities.Loki.Add(uusiKirjaus);
+                    }
                 }
                 else if (termostaatti.Lampo.Value > termostaatti.Tavoite.Value)
                 {
                     int uusiLampo = termostaatti.Lampo.Value - 1;
                     termostaatti.Lampo = uusiLampo;
-                    this.talonLampo = termostaatti.Lampo.Value;
+
+                    if (termostaatti.Lampo.Value == termostaatti.Tavoite.Value)
+                    {
+                        Loki uusiKirjaus = new Loki
+                        {
+                            OminaisuusId = termostaatti.OminaisuusId.Value,
+                            Tapahtuma = "Termostaatin tavoitelämpötila saavutettu",
+                            Ajakohta = DateTime.Now
+                        };
+                        entities.Loki.Add(uusiKirjaus);
+                    }
                 }
-         
+
+
             }
             entities.SaveChanges();
             entities.Dispose();
         }
-
         public ActionResult SaadaValo(int? id)
         {
-            if(id==null)
+            if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             AlytaloEntities entities = new AlytaloEntities();
-            Valot valo = entities.Valot.Find(id); 
-            if(valo == null)
+            Valot valo = entities.Valot.Find(id);
+            if (valo == null)
             {
-                return HttpNotFound(); 
+                return HttpNotFound();
             }
             entities.Dispose();
             return View(valo);
@@ -183,21 +217,55 @@ namespace AlytaloMVC.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SaadaValo([Bind(Include = "ValotId, Kaynnissa, Teho")] Valot valo)
+        public ActionResult SaadaValo([Bind(Include = "ValotId, OminaisuusId, Kaynnissa, Teho")] Valot valo)
         {
             AlytaloEntities entities = new AlytaloEntities();
-            // TODO: Vaihda ovalon kaynnissa tieto jos teho on muuta kuin nolla
-            // valo.Teho.Value; -- tulee läpi deggerista 
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                entities.Entry(valo).State = EntityState.Modified;
-                entities.SaveChanges(); 
+                Loki uusikirjaus = new Loki();
+                uusikirjaus.OminaisuusId = valo.OminaisuusId.Value;
+                uusikirjaus.Ajakohta = DateTime.Now;
+
+                if (valo.Teho.Value > 0)
+                {
+                    valo.Kaynnissa = true;
+                    uusikirjaus.Tapahtuma = "Valon teho muutettu arvoon " + valo.Teho.Value.ToString();
+
+                }
+                else
+                {
+                    valo.Kaynnissa = false;
+                    uusikirjaus.Tapahtuma = "Valo sammutettu";
+                 
+                }
+                entities.Loki.Add(uusikirjaus);
             }
-            return View("Index"); 
+            entities.Entry(valo).State = EntityState.Modified;
+            entities.SaveChanges();
+
+            return View("Index");
 
 
         }
-
+        private int TalonLampotila()
+        {
+            int i = 0;
+            int lampotila = 0;
+            AlytaloEntities entities = new AlytaloEntities();
+            foreach (Termostaatti termostaatti in entities.Termostaatti)
+            {
+                if (termostaatti.Lampo.HasValue)
+                {
+                    lampotila += termostaatti.Lampo.Value;
+                    i++;
+                }
+            }
+            if (i != 0)
+            {
+                return lampotila /= i;
+            }
+            return 20;
+        }
     }
 }

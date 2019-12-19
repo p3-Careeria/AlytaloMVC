@@ -49,8 +49,7 @@
     @foreach (var valot in Model.Valot)
     {
         int x = valot.ValotId - 999;
-        if (valot.Kaynnissa.Value || valot.Teho.Value != 0) { tilanne = "Valo on päällä"; } else { tilanne = "Valo on pois päältä"; };
-        //TODO: vaihdtaakko kaynnissa.value vertailuksi siitä onko teho == 0?? 
+        if (valot.Kaynnissa.Value) { tilanne = "Valo on päällä"; } else { tilanne = "Valo on pois päältä"; };
         <div class="col-md-3">
             <div class="card">
                 <div class="card-body">
