@@ -47,3 +47,16 @@ CREATE TABLE [dbo].[Loki]
 
 )
 
+----------------------------DEL/RESEED------------------------------------
+
+DELETE FROM Sauna
+DELETE FROM Valot
+DELETE FROM Termostaatti
+DELETE FROM Ominaisuudet
+DELETE FROM Loki
+
+DBCC CHECKIDENT ('Ominaisuudet', RESEED, 1000)  
+DBCC CHECKIDENT ('Loki', RESEED, 1000)
+DBCC CHECKIDENT ('Valot', RESEED, 1000)  
+DBCC CHECKIDENT ('Termostaatti', RESEED, 1000)
+DBCC CHECKIDENT ('Sauna', RESEED, 1000) 

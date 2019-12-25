@@ -1,19 +1,15 @@
 ﻿using AlytaloMVC.Models;
 using System;
-using System.Collections.Generic;
 using System.Data.Entity;
-using System.Diagnostics;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using System.Windows.Threading;
+
 
 namespace AlytaloMVC.Controllers
 {
     public class OminaisuudetController : Controller
     {
-
         public ActionResult Index()
         {
             return View();
@@ -161,40 +157,27 @@ namespace AlytaloMVC.Controllers
             AlytaloEntities entities = new AlytaloEntities();
             foreach (Termostaatti termostaatti in entities.Termostaatti)
             {
-                if (termostaatti.Lampo.Value < termostaatti.Tavoite.Value)  // heitä tämä toisto parametrilliseen metodiin jossa parametriks - tai +1, palautus arvoksiko int (?)  
-                {                                                           // mites Or || tähän kohtaan jolloin loki kirjaantuu vain kerran? 
-                    int uusiLampo = termostaatti.Lampo.Value + 1;
-                    termostaatti.Lampo = uusiLampo;
-
-                    if (termostaatti.Lampo.Value == termostaatti.Tavoite.Value)
-                    {
-                        Loki uusiKirjaus = new Loki
-                        {
-                            OminaisuusId = termostaatti.OminaisuusId.Value,
-                            Tapahtuma = "Termostaatin tavoitelämpötila "+termostaatti.Lampo + "°C saavutettu",
-                            Ajakohta = DateTime.Now
-                        };
-                        entities.Loki.Add(uusiKirjaus);
-                    }
-                }
-                else if (termostaatti.Lampo.Value > termostaatti.Tavoite.Value)
+                if (termostaatti.Lampo.Value != termostaatti.Tavoite.Value)
                 {
-                    int uusiLampo = termostaatti.Lampo.Value - 1;
-                    termostaatti.Lampo = uusiLampo;
-
+                    if (termostaatti.Lampo.Value < termostaatti.Tavoite.Value)
+                    {
+                        termostaatti.Lampo = termostaatti.Lampo.Value + 1;
+                    }
+                    else if (termostaatti.Lampo.Value > termostaatti.Tavoite.Value)
+                    {
+                        termostaatti.Lampo = termostaatti.Lampo.Value - 1;
+                    }
                     if (termostaatti.Lampo.Value == termostaatti.Tavoite.Value)
                     {
                         Loki uusiKirjaus = new Loki
                         {
                             OminaisuusId = termostaatti.OminaisuusId.Value,
-                            Tapahtuma = "Termostaatin tavoitelämpötila saavutettu",
+                            Tapahtuma = "Termostaatin tavoitelämpötila " + termostaatti.Lampo + "°C saavutettu",
                             Ajakohta = DateTime.Now
                         };
                         entities.Loki.Add(uusiKirjaus);
                     }
                 }
-
-
             }
             entities.SaveChanges();
             entities.Dispose();
@@ -237,7 +220,7 @@ namespace AlytaloMVC.Controllers
                 {
                     valo.Kaynnissa = false;
                     uusikirjaus.Tapahtuma = "Valo sammutettu";
-                 
+
                 }
                 entities.Loki.Add(uusikirjaus);
             }

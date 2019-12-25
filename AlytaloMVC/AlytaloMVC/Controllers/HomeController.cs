@@ -1,12 +1,10 @@
 ﻿using AlytaloMVC.Models;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
 
 namespace AlytaloMVC.Controllers
@@ -14,12 +12,10 @@ namespace AlytaloMVC.Controllers
     public class HomeController : Controller
     {
         private bool tapahtumiaTKssa;
-
         public ActionResult Index()
         {
             return View();
         }
-
         public ActionResult LuoOminaisuus()
         {
 
@@ -66,7 +62,6 @@ namespace AlytaloMVC.Controllers
             var x = new { ominaisuus = ominaisuus, success = success, error = error };
             return Json(x);
         }
-
         public ActionResult Tapahtumat()
         {
             AlytaloEntities entity = new AlytaloEntities();
@@ -99,7 +94,6 @@ namespace AlytaloMVC.Controllers
             return View(model);
 
         }
-
         public ActionResult DeleteTapahtuma(int? id)
         {
             AlytaloEntities entity = new AlytaloEntities();

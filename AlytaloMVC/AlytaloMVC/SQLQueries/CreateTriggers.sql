@@ -66,3 +66,6 @@ AS
 		INSERT INTO Loki(OminaisuusId, Tapahtuma, Ajakohta) VALUES (@OminaisuusID, 'Valo poistettu', GETDATE())
 	END 
 GO 
+
+
+ 
