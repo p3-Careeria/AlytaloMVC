@@ -6,10 +6,9 @@
 <p>&nbsp;</p>
 <h2>Tapahtumat</h2>
 
-
-<table class="table">
+<table class="table table-hover">
     <thead>
-        <tr>
+        <tr class="bg-secondary">
             <th>
                 Tapahtuman tunnus
             </th>
@@ -44,8 +43,8 @@
         </tr>
         }
     </tbody>
-
 </table>
+
 <script>
     const getCellValue = (tr, idx) => tr.children[idx].innerText || tr.children[idx].textContent;
     const comparer = (idx, asc) => (a, b) => ((v1, v2) =>

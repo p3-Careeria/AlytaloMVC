@@ -43,9 +43,9 @@
         </div>
         i++;
         keskiarvo = (keskiarvo + termostaatti.Lampo.Value) / i;
-            
     }
 </div>
+@if(keskiarvo == 0) { keskiarvo = 20; }
 <p style="margin-top: 12px;">Talon lämpötila  @keskiarvo</p>
 <h3>Valot:</h3>
 <div class="row">

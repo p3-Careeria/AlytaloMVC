@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Web.Mvc;
 
-
 namespace AlytaloMVC.Controllers
 {
     public class OminaisuudetController : Controller
@@ -50,9 +49,7 @@ namespace AlytaloMVC.Controllers
                 entities.Ominaisuudet.Remove(ominaisuudet);
                 entities.SaveChanges();
                 entities.Dispose();
-
             }
-
             Index();
             return Content("<script language='javascript' type='text/javascript'>" +
                             "window.location.href ='/Ominaisuudet' ;" +
@@ -133,10 +130,8 @@ namespace AlytaloMVC.Controllers
 
             AlytaloEntities entities = new AlytaloEntities();
 
-
             if (ModelState.IsValid)
             {
-
                 entities.Entry(termostaatti).State = EntityState.Modified;
 
                 Loki uusiKirjaus = new Loki
@@ -196,7 +191,6 @@ namespace AlytaloMVC.Controllers
             }
             entities.Dispose();
             return View(valo);
-
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -214,13 +208,11 @@ namespace AlytaloMVC.Controllers
                 {
                     valo.Kaynnissa = true;
                     uusikirjaus.Tapahtuma = "Valon teho muutettu arvoon " + valo.Teho.Value.ToString();
-
                 }
                 else
                 {
                     valo.Kaynnissa = false;
                     uusikirjaus.Tapahtuma = "Valo sammutettu";
-
                 }
                 entities.Loki.Add(uusikirjaus);
             }
@@ -228,8 +220,6 @@ namespace AlytaloMVC.Controllers
             entities.SaveChanges();
 
             return View("Index");
-
-
         }
         private int TalonLampotila()
         {
